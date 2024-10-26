@@ -1,0 +1,53 @@
+class Solution:
+    def rotate(self, matrix: List[List[int]]) -> None:
+        """
+        Do not return anything, modify matrix in-place instead.
+        """
+        n = len(matrix)
+
+        if n > 1:
+            loop = n // 2
+    
+            CORNER_PER_LINE = 2
+            edge_per_line = n - CORNER_PER_LINE
+
+            first_edge_above = 1
+            last_edge_below = -2
+            last_row = -1
+            first_column = 0
+            
+            for j in range(loop):
+                # corners
+                matrix[j][j], matrix[j][last_row] = matrix[j][last_row], matrix[j][j]
+                matrix[j][j], matrix[last_row][last_row] = matrix[last_row][last_row], matrix[j][j]
+                matrix[j][j], matrix[last_row][j] = matrix[last_row][j], matrix[j][j]
+        
+                # edges
+                if (j < loop - 1 and n % 2 == 0) or n % 2 != 0:
+                    for _ in range(edge_per_line):
+                        matrix[j][first_edge_above], matrix[first_edge_above][last_row] = matrix[first_edge_above][last_row], matrix[j][first_edge_above]
+                        matrix[j][first_edge_above], matrix[last_row][last_edge_below] = matrix[last_row][last_edge_below], matrix[j][first_edge_above]
+                        matrix[j][first_edge_above], matrix[last_edge_below][first_column] = matrix[last_edge_below][first_column], matrix[j][first_edge_above]
+
+                        first_edge_above += 1
+                        last_edge_below -= 1
+
+                first_edge_above = 1
+                first_edge_above += j + 1
+                last_edge_below = -2
+                last_edge_below -= j + 1
+                first_column += 1
+                last_row -= 1
+                edge_per_line -= 2
+                
+
+# 48.) Rotate image using a manual algorithm without transposition or matrix inversion. (Medium Array/Matrix Problem)
+
+# Time complexity: O(n^2) -> We iterate through each layer, rotating elements in place. The outer loop runs approximately n/2 times, with each layer requiring fewer swaps than the previous one. For example, in a 7x7 matrix, the first layer has 5 edge swaps, the next has 3, and the innermost layer has 1. Each layer rotation involves a fixed number of operations for each element, so the overall time complexity is proportional to the number of elements, or O(n^2).
+
+# Space complexity: O(1) -> The algorithm performs in-place modifications with only a constant amount of extra space needed for indexing and tracking edges.
+
+#P.S. I'm still a beginner at DSA, only knowing arrays. I just tried solving this on my own without using any techniques that I don't know yet, in order to further enhance my problem solving skills.
+
+
+            
